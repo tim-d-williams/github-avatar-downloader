@@ -1,6 +1,6 @@
 var request = require('request');
 var fs = require('fs');
-var secrets = require('./secrets')
+var secrets = require('./secrets');
 
 console.log('Welcome to the GitHub Avatar Downloader!');
 
@@ -25,17 +25,20 @@ function getRepoContributors(repoOwner, repoName, cb) {
         downloadImageByURL(urlToDownload, pathToSave)
         }
       });
-  };
+  }
 
 function downloadImageByURL(url, filePath) {
     request.get (url)
     .pipe(fs.createWriteStream(filePath));
 }
 
-
 var owner = process.argv[2];
 var repo = process.argv[3];
-getRepoContributors(owner, repo, function(err, result) {
-  console.log("Errors:", err);
-  console.log("Result:", result);
-});
+if (!owner || !repo ) {
+  console.log('You must provide both owner and repo!');
+} else {
+  getRepoContributors(owner, repo, function(err, result) {
+    console.log("Errors:", err);
+    console.log("Result:", result);
+  });
+}
